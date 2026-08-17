@@ -1,0 +1,22 @@
+agents:
+  # alice:
+  #   harness: goose          # AI runner: goose | codex
+  #   repos:
+  #     - your-org/my-repo       # GitHub repos this agent has access to (owner/repo)
+  #     - your-org/another-repo
+  #   env:                    # injected verbatim into credentials/<name>.env
+  #     GOOSE_PROVIDER: github_copilot
+  #     GOOSE_MODEL: claude-sonnet-4.6
+  #     GITHUB_COPILOT_TOKEN: ghp_xxx   # omit → run: buzz-team auth alice
+  #
+  # bob:
+  #   harness: goose
+  #   env:
+  #     GOOSE_PROVIDER: anthropic
+  #     GOOSE_MODEL: claude-sonnet-4-5
+  #     ANTHROPIC_API_KEY: sk-ant-xxx
+  #
+  # charlie:
+  #   harness: codex
+  #   env:
+  #     OPENAI_API_KEY: sk-xxx

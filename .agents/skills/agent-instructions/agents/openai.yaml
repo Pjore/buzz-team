@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Instructions"
+  short_description: "Write and audit AGENTS.md and Agent Skills"
