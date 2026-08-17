@@ -33,8 +33,8 @@ program
 
 program
   .command('delete <name>')
-  .description('Remove a GitHub App and its credential file')
-  .option('--github-token <token>', 'GitHub personal access token')
+  .description('Uninstall a GitHub App, remove relay membership, and delete its credential file')
+  .option('--relay-ssh <url>', 'SSH URL to relay server (e.g. root@relay.example.com)')
   .action(del);
 
 program
