@@ -7,7 +7,7 @@ description: Manage Coder workspaces for buzz-team-agents — push templates, cr
 
 ## Key facts
 
-- **Coder server**: `$CODER_URL` (set in awesome-os `.env`)
+- **Coder server**: `$CODER_URL`
 - **Template**: `buzz-team-agent` at `coder/templates/buzz-team-agent/`
 - **Container image**: `ghcr.io/$GHCR_OWNER/buzz-team-agent-coder:latest` (ARM64)
 - **SSH key**: `awesome-infra/keys/coder-ssh-key.pem`
