@@ -1,0 +1,25 @@
+services:
+  buzz-agent:
+    image: "${BUZZ_AGENT_IMAGE:-ghcr.io/${GHCR_OWNER}/buzz-team-agent-base:latest}"
+    restart: unless-stopped
+    environment:
+      BUZZ_RELAY_URL: "${BUZZ_RELAY_URL}"
+      BUZZ_PRIVATE_KEY: "${BUZZ_PRIVATE_KEY}"
+      BUZZ_ACP_KINDS: "${BUZZ_ACP_KINDS:-9,30078}"
+      BUZZ_ACP_RESPOND_TO: "${BUZZ_ACP_RESPOND_TO:-anyone}"
+      BUZZ_ACP_SUBSCRIBE: "${BUZZ_ACP_SUBSCRIBE:-mentions}"
+      BUZZ_ACP_AGENTS: "${BUZZ_ACP_AGENTS:-2}"
+      GITHUB_APP_ID: "${GITHUB_APP_ID}"
+      GITHUB_APP_INSTALLATION_ID: "${GITHUB_APP_INSTALLATION_ID}"
+      GITHUB_APP_PRIVATE_KEY: "${GITHUB_APP_PRIVATE_KEY}"
+      BOT_NAME: "${BOT_NAME}"
+      BOT_EMAIL: "${BOT_EMAIL}"
+      GOOSE_PROVIDER: "${GOOSE_PROVIDER:-github_copilot}"
+      GOOSE_MODEL: "${GOOSE_MODEL:-claude-sonnet-4.6}"
+    volumes:
+      - buzz-agent-home:/root
+    env_file:
+      - .env
+
+volumes:
+  buzz-agent-home:
