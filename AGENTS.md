@@ -23,7 +23,8 @@ Run directly without installing:
 node src/cli/bin/buzz-team.js <command>
 ```
 
-The `defaults/` dir is at `src/defaults/` (not `src/cli/defaults/`). The `__dirname` in `init.js` resolves two levels up from `commands/`.
+The `defaults/` dir lives at `src/cli/defaults/` (inside the npm package root), so it's included
+by the `files` field in `package.json` and resolves correctly both from source and once published.
 
 `@noble/secp256k1` v2 does not export `bytesToHex`/`hexToBytes` — use `Buffer.from(bytes).toString('hex')` and `Buffer.from(hex, 'hex')`.
 

@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULTS_DIR = path.resolve(__dirname, '../../defaults');
+const DEFAULTS_DIR = path.resolve(__dirname, '../defaults');
 
 export async function init() {
   const cwd = process.cwd();
