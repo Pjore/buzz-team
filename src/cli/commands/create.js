@@ -19,6 +19,13 @@ export async function create(name, opts) {
     process.exit(1);
   }
 
+  // Fail fast, before creating any GitHub App or relay membership.
+  const relayUrl = process.env.BUZZ_RELAY_URL;
+  if (!relayUrl) {
+    console.error('ERROR: BUZZ_RELAY_URL is required — set it in .env or as an environment variable');
+    process.exit(1);
+  }
+
   console.log(`Creating agent: ${name}`);
 
   const githubOwner = await getGithubOwner(GITHUB_TOKEN);
@@ -66,22 +73,9 @@ export async function create(name, opts) {
     console.log(`  GitHub App Installation ID: ${appCreds.installation_id}`);
   }
 
-  // 3. Enroll pubkey in relay
-  if (config.BUZZ_RELAY_SSH) {
-    console.log('  Enrolling pubkey in relay…');
-    enrollInRelay(config.BUZZ_RELAY_SSH, pubkey, config.BUZZ_RELAY_SSH_KEY);
-    console.log('  Relay enrollment done');
-  } else {
-    console.log('  WARN: BUZZ_RELAY_SSH not set — skipping relay enrollment');
-  }
-
-  // 4. Publish Nostr profile
-  const relayUrl = process.env.BUZZ_RELAY_URL;
-  if (!relayUrl) throw new Error('BUZZ_RELAY_URL is required — set it in .env or as an environment variable');
-  console.log(`  Publishing Nostr profile to ${relayUrl}…`);
-  await publishProfile(privkey, pubkey, name.charAt(0).toUpperCase() + name.slice(1), '🤖', relayUrl);
-
-  // 5. Write credentials file
+  // 3. Persist credentials now — the keypair and GitHub App already exist at this
+  // point (real, hard-to-reverse side effects), so a later failure (relay/profile)
+  // must not force a recreate on retry and lose the App's private key.
   const agents = readAgentsYaml();
   const agentDef = agents[name] ?? {};
   const agentEnv = agentDef.env ?? {};
@@ -104,8 +98,22 @@ export async function create(name, opts) {
   credLines.push('');
 
   fs.writeFileSync(credsPath, credLines.join('\n'), { mode: 0o600 });
+  console.log(`  Credentials written to: credentials/${name}.env`);
 
-  console.log(`\nCredentials written to: credentials/${name}.env`);
+  // 4. Enroll pubkey in relay
+  if (config.BUZZ_RELAY_SSH) {
+    console.log('  Enrolling pubkey in relay…');
+    enrollInRelay(config.BUZZ_RELAY_SSH, pubkey, config.BUZZ_RELAY_SSH_KEY);
+    console.log('  Relay enrollment done');
+  } else {
+    console.log('  WARN: BUZZ_RELAY_SSH not set — skipping relay enrollment');
+  }
+
+  // 5. Publish Nostr profile
+  console.log(`  Publishing Nostr profile to ${relayUrl}…`);
+  await publishProfile(privkey, pubkey, name.charAt(0).toUpperCase() + name.slice(1), '🤖', relayUrl);
+
+  console.log(`\nCredentials: credentials/${name}.env`);
 
   const CREDENTIAL_SUFFIXES = ['_TOKEN', '_KEY', '_SECRET', '_API_KEY'];
   const hasCredentials = Object.keys(agentEnv).some(k =>
