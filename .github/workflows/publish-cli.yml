@@ -1,0 +1,50 @@
+name: Publish buzz-team CLI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/cli/**"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm trusted publishing (OIDC)
+    defaults:
+      run:
+        working-directory: src/cli
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      # npm trusted publishing requires npm CLI >= 11.5.1
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Check if this version is already published
+        id: check
+        run: |
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          PUBLISHED_VERSION=$(npm view buzz-team version 2>/dev/null || echo "none")
+          echo "local version: $LOCAL_VERSION, published version: $PUBLISHED_VERSION"
+          if [ "$LOCAL_VERSION" = "$PUBLISHED_VERSION" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.check.outputs.skip != 'true'
+        run: npm ci
+
+      - name: Publish to npm
+        if: steps.check.outputs.skip != 'true'
+        run: npm publish

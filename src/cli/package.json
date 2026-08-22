@@ -1,8 +1,14 @@
 {
   "name": "buzz-team",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for managing buzz-team AI agents",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pjore/buzz-team.git",
+    "directory": "src/cli"
+  },
   "bin": {
     "buzz-team": "./bin/buzz-team.js"
   },

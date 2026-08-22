@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name('buzz-team')
   .description('Manage buzz-team AI agents')
-  .version('0.1.0');
+  .version('0.1.1');
 
 program
   .command('init')
