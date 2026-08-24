@@ -81,7 +81,7 @@ The `workspace soul push <name>` action: copies local `agents/<name>/AGENTS.md` 
 _Avoid_: persona sync, soul sync
 
 **credentials**:
-Per-agent file `credentials/<name>.env` written by `buzz-team create`. Contains identity values for one agent.
+Per-agent file `credentials/<name>.env`, written incrementally by `buzz-team key create` and `app create` (or their `id create` composite). Contains identity values for one agent.
 _Avoid_: secrets file, env file (too generic)
 
 **relay**:

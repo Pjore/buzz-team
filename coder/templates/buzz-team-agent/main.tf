@@ -105,22 +105,6 @@ data "coder_parameter" "github_app_private_key" {
   mutable      = false
 }
 
-data "coder_parameter" "agents_md" {
-  display_name = "AGENTS.md"
-  name         = "agents_md"
-  type         = "string"
-  default      = ""
-  mutable      = true
-}
-
-data "coder_parameter" "soul_md" {
-  display_name = "SOUL.md"
-  name         = "soul_md"
-  type         = "string"
-  default      = ""
-  mutable      = true
-}
-
 data "coder_parameter" "preview_ports" {
   display_name = "Preview Ports"
   name         = "preview_ports"
@@ -186,8 +170,6 @@ resource "docker_container" "workspace" {
     "GITHUB_APP_PRIVATE_KEY=${data.coder_parameter.github_app_private_key.value}",
     "BOT_NAME=${local.bot_name}",
     "BOT_EMAIL=${local.bot_email}",
-    "AGENTS_MD=${data.coder_parameter.agents_md.value}",
-    "SOUL_MD=${data.coder_parameter.soul_md.value}",
     "GOOSE_PROVIDER=github_copilot",
     "GOOSE_MODEL=claude-sonnet-4.6",
   ]
@@ -260,13 +242,7 @@ EOF
     git config --global user.name "${local.bot_name}"
     git config --global user.email "${local.bot_email}"
 
-    # Write persona files from parameters
-    if [[ -n "${data.coder_parameter.agents_md.value}" ]]; then
-      printf '%s' "${data.coder_parameter.agents_md.value}" > "$HOME/AGENTS.md"
-    fi
-    if [[ -n "${data.coder_parameter.soul_md.value}" ]]; then
-      printf '%s' "${data.coder_parameter.soul_md.value}" > "$HOME/SOUL.md"
-    fi
+    # Persona files (AGENTS.md/SOUL.md) arrive via `buzz-team workspace soul push`, not this template.
 
     # Configure goose
     mkdir -p "$HOME/.config/goose"
