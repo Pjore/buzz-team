@@ -61,23 +61,39 @@ _Avoid_: Copilot auth, goose auth (too harness-specific)
 ### Tooling and configuration
 
 **buzz-team CLI**:
-The npm package (command: `buzz-team`) that operators run on their host machine to provision and manage buzz-team-agents. Provides `init`, `create`, `update`, `delete`, `auth`.
+The npm package (command: `buzz-team`) that operators run on their host machine to provision and manage buzz-team-agents. Provides `init`, `key create`, `app create`, `app update`, `community join`, `profile publish`, `id create`, `id delete`, `workspace create`, `workspace update`, `workspace delete`, `workspace soul push`, `auth`. Noun/verb grouped (`gh`-cli style); no flat top-level `create`/`update`/`delete`.
 _Avoid_: management scripts, manage-agents, CLI tool
 
 **team config**:
 The local directory containing `agents.yaml`, per-agent persona files, and `.env`. Always gitignored. Scaffolded by `buzz-team init`.
 _Avoid_: project config, workspace config
 
+**team-defaults**:
+The `team-defaults` block in `agents.yaml` — shared `repos` and `workspace` settings inherited by every agent unless overridden per-agent.
+_Avoid_: global config, defaults block
+
+**workspace backend**:
+The provisioning target for a workspace: `coder` (a Coder-managed container) or `docker-compose` (direct `docker compose -p <name>` invocation, optionally against a remote `host` via `DOCKER_HOST=ssh://...`). Selected per-agent under `workspace.backend` in `agents.yaml`.
+_Avoid_: deployment target, provisioner
+
+**soul push**:
+The `workspace soul push <name>` action: copies local `agents/<name>/AGENTS.md` and `SOUL.md` into a running workspace's `$HOME` and restarts `buzz-acp`. The only mechanism that delivers persona to a workspace — never templated through Coder parameters or Terraform state. Used standalone and internally by `workspace create` and `workspace update --soul-only`.
+_Avoid_: persona sync, soul sync
+
 **credentials**:
 Per-agent file `credentials/<name>.env` written by `buzz-team create`. Contains identity values for one agent.
 _Avoid_: secrets file, env file (too generic)
 
 **relay**:
-The Buzz Nostr relay server. Agents are enrolled by `buzz-team create` via SSH using `BUZZ_RELAY_SSH` (e.g. `root@your-relay-host`) and optionally `BUZZ_RELAY_SSH_KEY` for a non-default key path. Address supplied to the agent as `BUZZ_RELAY_URL`.
-_Avoid_: Nostr relay (when speaking within this project's context)
+The Buzz Nostr relay server itself (the process/infrastructure). Address supplied to the agent as `BUZZ_RELAY_URL`. Distinct from **community** (the membership relationship an agent has with it).
+_Avoid_: Nostr relay (when speaking within this project's context), relay membership (use community)
+
+**community**:
+An agent's membership on the relay — granted by `buzz-team community join <name>` (SSH + `buzz-admin add-member`) using `BUZZ_RELAY_SSH` (e.g. `root@your-relay-host`) and optionally `BUZZ_RELAY_SSH_KEY`, revoked by the reverse (`buzz-admin remove-member`). Distinct from the relay (the server) and the profile (display metadata).
+_Avoid_: relay enrollment, relay membership
 
 **profile**:
-A Nostr kind-0 event published to the relay that sets the agent's `display_name` and `name` fields. Published by `buzz-team create` after relay enrollment. Without it, the agent appears as "Unnamed member" in Buzz Desktop.
+A Nostr kind-0 event published to the relay that sets the agent's `display_name` and `name` fields. Published by `buzz-team profile publish <name>`, normally as the last step of `id create`. Without it, the agent appears as "Unnamed member" in Buzz Desktop.
 
 ### Coder deployment
 
