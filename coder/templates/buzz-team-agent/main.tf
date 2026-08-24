@@ -19,6 +19,8 @@ locals {
   bot_name       = "${data.coder_parameter.github_owner.value}-${data.coder_parameter.agent_name.value}[bot]"
   bot_email      = "${data.coder_parameter.github_owner.value}-${data.coder_parameter.agent_name.value}[bot]@users.noreply.github.com"
 
+  image_owner = lower(data.coder_parameter.github_owner.value)
+
   preview_list = [for s in split(",", data.coder_parameter.preview_ports.value) : trimspace(s) if trimspace(s) != ""]
   preview_map = {
     for entry in local.preview_list :
@@ -138,7 +140,7 @@ resource "docker_container" "workspace" {
 
   dns      = ["1.1.1.1"]
   hostname = lower(data.coder_workspace.me.name)
-  image    = "ghcr.io/${data.coder_parameter.github_owner.value}/buzz-team-agent-coder:latest"
+  image    = "ghcr.io/${local.image_owner}/buzz-team-agent-coder:latest"
   name     = local.container_name
   command  = [
     "sh", "-c",
