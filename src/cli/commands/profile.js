@@ -17,5 +17,5 @@ export async function publish(name) {
 
   const pubkey = derivePublicKey(creds.BUZZ_PRIVATE_KEY);
   console.log(`  Publishing Nostr profile to ${relayUrl}…`);
-  await publishProfile(creds.BUZZ_PRIVATE_KEY, pubkey, name.charAt(0).toUpperCase() + name.slice(1), '🤖', relayUrl);
+  await publishProfile(creds.BUZZ_PRIVATE_KEY, pubkey, name.charAt(0).toUpperCase() + name.slice(1), '✨', relayUrl);
 }
