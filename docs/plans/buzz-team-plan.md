@@ -284,3 +284,7 @@ buzz-team/
 - `agents.yaml` and `.env` are always gitignored in user repos. Shipped as `.example` variants only.
 - CLI config precedence: flags > `.env` > env vars.
 - Persona files (`AGENTS.md`, `SOUL.md`) and `agents.yaml` defaults live in `src/defaults/`, bundled with the npm package. `buzz-team init` copies them to the operator's cwd. The images do not ship default persona files.
+
+---
+
+Follow-on work (identity command restructuring, `workspace` provisioning commands) continues in [`cli-revision-plan.md`](./cli-revision-plan.md).
