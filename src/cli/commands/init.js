@@ -45,5 +45,5 @@ export async function init() {
   console.log('  1. Edit agents.yaml — add your agents');
   console.log('  2. Edit AGENTS.md and SOUL.md — set the agent persona');
   console.log('  3. Copy .env.example → .env and fill GITHUB_TOKEN and BUZZ_RELAY_SSH');
-  console.log('  4. Run: buzz-team create <name>');
+  console.log('  4. Run: buzz-team id create <name>');
 }

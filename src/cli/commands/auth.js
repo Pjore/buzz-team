@@ -18,7 +18,7 @@ export function auth(name, opts) {
     process.exit(1);
   }
 
-  const harness = agentDef.harness ?? 'goose';
+  const harness = agentDef.workspace?.harness ?? 'goose';
   const configureCmd = HARNESS_CONFIGURE[harness];
   if (!configureCmd) {
     console.error(`ERROR: No configure command known for harness "${harness}"`);

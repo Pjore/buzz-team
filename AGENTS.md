@@ -44,7 +44,7 @@ BUZZ_RELAY_SSH_KEY=$BUZZ_RELAY_SSH_KEY \
   node /path/to/buzz-team/src/cli/bin/buzz-team.js init
 
 # 3. Create an agent
-node .../buzz-team.js create <name>
+node .../buzz-team.js id create <name>
 
 # 4. Run the container
 docker run -d --name <name>-test --env-file run.env buzz-team-agent-base:local

@@ -1,6 +1,15 @@
+# team-defaults:
+#   repos:                    # shared GitHub App repo access, unless an agent overrides `repos`
+#     - your-org/my-repo
+#   workspace:
+#     harness: goose          # AI runner: goose | codex
+#     backend: coder          # coder | docker-compose
+#     arch: arm64
+#     template: buzz-team-agent   # coder backend only
+#     host: https://coder.example.com   # coder URL, or docker DOCKER_HOST target
+#
 agents:
   # alice:
-  #   harness: goose          # AI runner: goose | codex
   #   repos:
   #     - your-org/my-repo       # GitHub repos this agent has access to (owner/repo)
   #     - your-org/another-repo
@@ -10,13 +19,15 @@ agents:
   #     GITHUB_COPILOT_TOKEN: ghp_xxx   # omit → run: buzz-team auth alice
   #
   # bob:
-  #   harness: goose
+  #   workspace:
+  #     host: https://other-coder.example.com   # per-agent override, rest inherited from team-defaults
   #   env:
   #     GOOSE_PROVIDER: anthropic
   #     GOOSE_MODEL: claude-sonnet-4-5
   #     ANTHROPIC_API_KEY: sk-ant-xxx
   #
   # charlie:
-  #   harness: codex
+  #   workspace:
+  #     harness: codex
   #   env:
   #     OPENAI_API_KEY: sk-xxx
