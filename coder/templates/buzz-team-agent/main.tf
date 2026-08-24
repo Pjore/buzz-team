@@ -280,16 +280,10 @@ default:
       path: ~/AGENTS.md
 GOOSE_PROFILE
 
-    # Start token refresh daemon via tmux
-    cat > "$HOME/.buzz-token-refresh.sh" << 'REFRESH'
-#!/bin/bash
-while true; do
-  sleep 3300
-  /usr/local/bin/token-refresh.sh
-done
-REFRESH
-    chmod +x "$HOME/.buzz-token-refresh.sh"
-    tmux new-session -d -s buzz-token-refresh "exec bash $HOME/.buzz-token-refresh.sh" 2>/dev/null || true
+    # Start token refresh daemon (token-refresh.sh loops internally; no tmux in this image)
+    nohup bash /usr/local/bin/token-refresh.sh >> "$HOME/.github-token-refresh.out" 2>&1 < /dev/null &
+    disown
+    echo "=== token-refresh daemon started (PID $!) ==="
 
     # Start buzz-acp
     BUZZ_RELAY_URL="${data.coder_parameter.buzz_relay_url.value}" \
