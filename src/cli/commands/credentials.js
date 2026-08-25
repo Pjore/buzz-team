@@ -34,3 +34,9 @@ export function deleteCreds(name) {
 export function unwrapPem(raw) {
   return (raw ?? '').replace(/^'|'$/g, '').replace(/\\n/g, '\n');
 }
+
+// Strips the surrounding quotes only, keeping \n escaped as literal backslash-n
+// (for consumers like the Coder template that unescape it themselves).
+export function stripQuotes(raw) {
+  return (raw ?? '').replace(/^'|'$/g, '');
+}

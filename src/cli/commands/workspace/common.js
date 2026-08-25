@@ -2,11 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import { readAgentsYaml } from '../agents-yaml.js';
 import { readCreds } from '../credentials.js';
+import { loadConfig } from '../config.js';
 import { checkCoderPrereqs, checkDockerComposePrereqs } from './prereqs.js';
 import * as coderBackend from './coder.js';
 import * as composeBackend from './docker-compose.js';
 
 export function getAgentWorkspace(name) {
+  loadConfig();
   const agents = readAgentsYaml();
   const agent = agents[name];
   if (!agent) {

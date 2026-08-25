@@ -80,6 +80,13 @@ docker run --rm ghcr.io/$GHCR_OWNER/buzz-team-agent-coder:latest sh -c 'echo ok 
 
 **"ERR_OSSL_UNSUPPORTED" in startup script**: The `GITHUB_APP_PRIVATE_KEY` env var is empty. Root cause: the credential file had an unquoted PEM value that was truncated by the shell. Fix: regenerate credentials or use Python extraction above.
 
+**`coder ssh` hangs or fails when pushing persona files / restarting `buzz-acp`** (used by `buzz-team workspace soul push` / `update`): `coder ssh` allocates a PTY and defaults to waiting on the startup script, both of which break naive remote commands. Root causes and fixes:
+- **Piping file content over stdin hangs forever.** `execSync('coder ssh <ws> -- "cat > file"', {input: content})` never delivers EOF — the PTY echoes the input back instead of terminating the write. Fix: encode content as base64 and pass it inline in the command string: `coder ssh --wait no <ws> -- 'printf %s <base64> | base64 -d > ~/<file>'`.
+- **`--wait auto` (the default) hangs** because our `startup_script` backgrounds long-running daemons and never "completes". Always pass `--wait no` (`--no-wait` also works but is deprecated).
+- **`pkill -f buzz-acp` kills the wrong thing.** Inside `coder ssh <ws> -- '...'`, the remote shell's own command line contains the string `buzz-acp`, so a pattern-based `pkill -f` matches and kills the session itself (`Process exited with status 255`). Use `pkill -x buzz-acp` (exact process name) instead.
+- **A relaunched daemon dies when the ssh session tears down**, even with `nohup ... & disown`. `nohup` alone isn't enough — the process is still in the ssh session's process group and gets torn down with it. Fix: launch with `setsid` to put it in its own session, and add a trailing `sleep 2` after backgrounding it so it has time to actually detach before the shell (and the ssh connection) exits:
+  `pkill -x buzz-acp || true; setsid nohup buzz-acp ... >> /tmp/buzz-acp.log 2>&1 < /dev/null & disown; sleep 2`.
+
 **Startup script logs**: `coder ssh <workspace> -- cat /tmp/coder-startup-script.log`
 
 **Container process list**: `ssh root@$CODER_SSH_HOST "docker exec coder-<owner>-<name> ps aux"`
