@@ -12,6 +12,7 @@ export async function init() {
     ['agents.example.yaml', 'agents.yaml'],
     ['AGENTS.md', 'AGENTS.md'],
     ['SOUL.md', 'SOUL.md'],
+    ['TEAM.md', 'TEAM.md'],
     ['.env.example', '.env.example'],
   ];
 
@@ -44,6 +45,7 @@ export async function init() {
   console.log('\nNext steps:');
   console.log('  1. Edit agents.yaml — add your agents');
   console.log('  2. Edit AGENTS.md and SOUL.md — set the agent persona');
-  console.log('  3. Copy .env.example → .env and fill GITHUB_TOKEN and BUZZ_RELAY_SSH');
-  console.log('  4. Run: buzz-team id create <name>');
+  console.log('  3. Edit TEAM.md — list your team members and shared rules');
+  console.log('  4. Copy .env.example → .env and fill GITHUB_TOKEN and BUZZ_RELAY_SSH');
+  console.log('  5. Run: buzz-team id create <name>');
 }

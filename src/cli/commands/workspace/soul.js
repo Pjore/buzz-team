@@ -13,15 +13,9 @@ export function push(name, ws) {
   const agentsMd = readPersonaFile(name, 'AGENTS.md');
   const soulMd = readPersonaFile(name, 'SOUL.md');
 
-  if (ws.backend === 'docker-compose') {
-    writeViaCompose(name, ws, 'AGENTS.md', agentsMd);
-    writeViaCompose(name, ws, 'SOUL.md', soulMd);
-    execSync(`docker compose -p ${name} restart`, { stdio: 'inherit', env: { ...process.env, DOCKER_HOST: ws.host } });
-  } else {
-    writeViaSsh(name, 'AGENTS.md', agentsMd);
-    writeViaSsh(name, 'SOUL.md', soulMd);
-    coderSsh(name, RESTART_CMD);
-  }
+  writeRemoteFile(name, ws, 'AGENTS.md', agentsMd);
+  writeRemoteFile(name, ws, 'SOUL.md', soulMd);
+  restartAgent(name, ws);
   console.log(`  Persona pushed to ${name}`);
 }
 
@@ -29,6 +23,21 @@ export function push(name, ws) {
 function readPersonaFile(name, filename) {
   const p = path.join(process.cwd(), 'agents', name, filename);
   return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
+}
+
+// Shared with team.js: writes one file into a running workspace, backend-aware.
+export function writeRemoteFile(name, ws, filename, content) {
+  if (ws.backend === 'docker-compose') writeViaCompose(name, ws, filename, content);
+  else writeViaSsh(name, filename, content);
+}
+
+// Shared with team.js: restarts buzz-acp so it picks up freshly pushed files.
+export function restartAgent(name, ws) {
+  if (ws.backend === 'docker-compose') {
+    execSync(`docker compose -p ${name} restart`, { stdio: 'inherit', env: { ...process.env, DOCKER_HOST: ws.host } });
+  } else {
+    coderSsh(name, RESTART_CMD);
+  }
 }
 
 // `--wait no` skips waiting on the startup script, which never completes

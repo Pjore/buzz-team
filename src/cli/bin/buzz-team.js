@@ -10,6 +10,7 @@ import * as workspaceCreate from '../commands/workspace/create.js';
 import * as workspaceUpdate from '../commands/workspace/update.js';
 import * as workspaceDelete from '../commands/workspace/delete.js';
 import * as workspaceSoul from '../commands/workspace/soul-cmd.js';
+import * as workspaceTeam from '../commands/workspace/team-cmd.js';
 import { auth } from '../commands/auth.js';
 
 const program = new Command();
@@ -85,7 +86,7 @@ const workspaceCmd = program.command('workspace').description("Manage an agent's
 
 workspaceCmd
   .command('create <name>')
-  .description("Provision a running workspace for an agent and push its persona")
+  .description("Provision a running workspace for an agent and push its persona and TEAM.md")
   .action(workspaceCreate.create);
 
 workspaceCmd
@@ -105,6 +106,13 @@ workspaceSoulCmd
   .command('push <name>')
   .description('Push AGENTS.md/SOUL.md into a running workspace and restart buzz-acp')
   .action(workspaceSoul.push);
+
+const workspaceTeamCmd = workspaceCmd.command('team').description('Manage the shared team charter across all agent workspaces');
+
+workspaceTeamCmd
+  .command('push [name]')
+  .description('Push TEAM.md into one agent workspace, or all agents if no name is given')
+  .action(workspaceTeam.push);
 
 program
   .command('auth <name>')
