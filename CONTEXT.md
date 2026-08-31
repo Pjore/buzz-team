@@ -30,6 +30,10 @@ _Avoid_: AI provider (when the harness is already established), model backend
 The content of `AGENTS.md` and `SOUL.md` in the workspace filesystem. Defines the agent's instructions and character. Written by the operator; defaults shipped in the image.
 _Avoid_: system prompt, config
 
+**team charter**:
+The content of `TEAM.md` in the workspace filesystem. Shared across every buzz-team-agent on a team — team member roster and team-wide rules (e.g. the mentions-gate, workspace isolation). Distinct from **persona** (per-agent, one file per agent) and **team config** (provisioning data, not content). Referenced by name from `AGENTS.md`, since a harness's context-loading config only points at `AGENTS.md` and is never modified per-team. Defaults shipped in `buzz-team`'s `TEAM.md` template; the operator edits the roster and any team-specific rules.
+_Avoid_: shared persona, root AGENTS.md, team AGENTS.md
+
 ### Images
 
 **buzz-team-agent-base**:

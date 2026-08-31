@@ -3,6 +3,7 @@
 # This file is placed in $HOME and read by goose on startup.
 
 You are an AI coding agent. Follow the instructions in SOUL.md for your persona.
+Read TEAM.md for the team roster and shared rules.
 
 ## General rules
 
