@@ -5,7 +5,7 @@
 Tooling for building, provisioning, and running AI agents on a Nostr-based relay (Buzz ACP). Three artifacts:
 
 1. **Docker images** — `buzz-team-agent-base` (debian:trixie-slim) and `buzz-team-agent-coder` (codercom/enterprise-base)
-2. **Coder template** — `coder/templates/buzz-agent/main.tf`
+2. **Coder template** — `coder/templates/buzz-team-agent/main.tf`
 3. **CLI** — `src/cli/` npm package (`buzz-team init|create|update|delete`)
 
 ## Key constraints

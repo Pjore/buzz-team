@@ -269,7 +269,7 @@ buzz-team/
 
 1. Finalize `build-base.yml` and `build-coder.yml` with multi-arch support note (ARM64 now, x86 later — add `linux/amd64` to buildx platform list when ready)
 2. Add `CODEOWNERS` or release tagging strategy
-3. In `awesome-infra`: remove `buzz/agents/`, `coder/templates/buzz-agent/`, `coder/agents/manage-agents.sh`, `coder/agents/create-app.js`, `buzz/scripts/publish-agent-profiles.js` once `buzz-team` equivalents are verified
+3. Done — `awesome-infra/coder/templates/buzz-agent/` and `awesome-infra/coder/agents/` (`manage-agents.sh`, `create-app.js`, `agents.yaml`, `credentials/`) removed now that `buzz-team` equivalents (`workspace create`, `id create`) are verified. `buzz/agents/` (the live Dokploy relay deployment) is out of scope — not superseded.
 4. Update `awesome-infra` README to point to `buzz-team`
 
 ---
