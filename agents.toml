@@ -14,12 +14,12 @@ name = "branch-and-pr"
 source = "Pjore/awesome-os"
 
 [[skills]]
-name = "agent-instructions"
-source = "path:.agents/skills/agent-instructions"
+name = "agent-tools"
+source = "Pjore/awesome-os"
 
 [[skills]]
 name = "coder-workspace"
-source = "path:.agents/skills/coder-workspace"
+source = "Pjore/awesome-infra"
 
 [[skills]]
 name = "domain-modeling"
