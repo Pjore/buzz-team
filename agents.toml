@@ -1,0 +1,38 @@
+version = 1
+agents = ["copilot", "pi"]
+
+[[skills]]
+name = "credential-security"
+source = "Pjore/awesome-os"
+
+[[hooks]]
+event = "PostToolUse"
+command = ".agents/skills/credential-security/scripts/redact-filter.sh"
+
+[[skills]]
+name = "branch-and-pr"
+source = "Pjore/awesome-os"
+
+[[skills]]
+name = "agent-instructions"
+source = "path:.agents/skills/agent-instructions"
+
+[[skills]]
+name = "coder-workspace"
+source = "path:.agents/skills/coder-workspace"
+
+[[skills]]
+name = "domain-modeling"
+source = "mattpocock/skills"
+
+[[skills]]
+name = "grill-me"
+source = "mattpocock/skills"
+
+[[skills]]
+name = "grill-with-docs"
+source = "mattpocock/skills"
+
+[[skills]]
+name = "grilling"
+source = "mattpocock/skills"
