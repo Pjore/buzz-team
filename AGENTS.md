@@ -8,6 +8,10 @@ Tooling for building, provisioning, and running AI agents on a Nostr-based relay
 2. **Coder template** — `coder/templates/buzz-team-agent/main.tf`
 3. **CLI** — `src/cli/` npm package (`buzz-team init|create|update|delete`)
 
+## Agent Skills
+
+Declared in `agents.toml`, managed through [dotagents](https://github.com/getsentry/dotagents). At the start of every session, refresh managed skills before doing any work: run `dotagents --project install` if installed globally, otherwise `npx @sentry/dotagents@latest --project install` — the npm package is `@sentry/dotagents`; an unrelated package literally named `dotagents` also exists on npm, don't use it. Dotagents-managed skills are gitignored, not committed; locally-authored skills remain committed under `.agents/skills/`.
+
 ## Key constraints
 
 - All images are `linux/arm64` first. Never break ARM; add `linux/amd64` later.
